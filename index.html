@@ -6,7 +6,6 @@
 <title>This Week's Menu</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { margin: 0; -webkit-tap-highlight-color: transparent; }
@@ -16,11 +15,24 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel" data-presets="react">
-const { useState, useEffect, useCallback } = React;
+<script>
+'use strict';
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _React = React;
+var useState = _React.useState;
+var useEffect = _React.useEffect;
+var useCallback = _React.useCallback;
 
 // ---------- THEME ----------
-const C = {
+var C = {
   paper: '#EEEDE7',
   paperCard: '#FFFFFF',
   ink: '#22271F',
@@ -30,121 +42,416 @@ const C = {
   mustard: '#C98A2C',
   mustardSoft: '#F3E4C8',
   line: '#D8D6CC',
-  danger: '#B5493A',
+  danger: '#B5493A'
 };
 
-const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const STORAGE_KEY = 'mealPlannerApiUrl';
+var DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+var STORAGE_KEY = 'mealPlannerApiUrl';
 
 function getMonday(d) {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
+  var date = new Date(d);
+  var day = date.getDay();
+  var diff = day === 0 ? -6 : 1 - day;
   date.setDate(date.getDate() + diff);
   date.setHours(0, 0, 0, 0);
   return date;
 }
-function isoDate(d) { return d.toISOString().slice(0, 10); }
-function addDays(d, n) { const nd = new Date(d); nd.setDate(nd.getDate() + n); return nd; }
-function prettyDate(d) { return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
+function isoDate(d) {
+  return d.toISOString().slice(0, 10);
+}
+function addDays(d, n) {
+  var nd = new Date(d);nd.setDate(nd.getDate() + n);return nd;
+}
+function prettyDate(d) {
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
 
 // ---------- TINY ICONS (text-based, no icon library needed) ----------
-const Icon = ({ children, size = 18, color = 'currentColor' }) => (
-  <span style={{ fontSize: size, color, lineHeight: 1, display: 'inline-block' }}>{children}</span>
-);
-const IconPlus = (p) => <Icon {...p}>+</Icon>;
-const IconX = (p) => <Icon {...p}>✕</Icon>;
-const IconSettings = (p) => <Icon {...p}>⚙</Icon>;
-const IconChevronLeft = (p) => <Icon {...p}>‹</Icon>;
-const IconChevronRight = (p) => <Icon {...p}>›</Icon>;
-const IconHistory = (p) => <Icon {...p}>↺</Icon>;
-const IconSkip = (p) => <Icon {...p}>⏭</Icon>;
-const IconTrash = (p) => <Icon {...p}>🗑</Icon>;
-const IconLoader = ({ size = 28, color = C.sage }) => (
-  <div className="spin" style={{ width: size, height: size, border: `3px solid ${C.sageSoft}`, borderTopColor: color, borderRadius: '50%' }} />
-);
+var Icon = function Icon(_ref) {
+  var children = _ref.children;
+  var _ref$size = _ref.size;
+  var size = _ref$size === undefined ? 18 : _ref$size;
+  var _ref$color = _ref.color;
+  var color = _ref$color === undefined ? 'currentColor' : _ref$color;
+  return React.createElement(
+    'span',
+    { style: { fontSize: size, color: color, lineHeight: 1, display: 'inline-block' } },
+    children
+  );
+};
+var IconPlus = function IconPlus(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '+'
+  );
+};
+var IconX = function IconX(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '✕'
+  );
+};
+var IconSettings = function IconSettings(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '⚙'
+  );
+};
+var IconChevronLeft = function IconChevronLeft(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '‹'
+  );
+};
+var IconChevronRight = function IconChevronRight(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '›'
+  );
+};
+var IconHistory = function IconHistory(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '↺'
+  );
+};
+var IconSkip = function IconSkip(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '⏭'
+  );
+};
+var IconTrash = function IconTrash(p) {
+  return React.createElement(
+    Icon,
+    p,
+    '🗑'
+  );
+};
+var IconLoader = function IconLoader(_ref2) {
+  var _ref2$size = _ref2.size;
+  var size = _ref2$size === undefined ? 28 : _ref2$size;
+  var _ref2$color = _ref2.color;
+  var color = _ref2$color === undefined ? C.sage : _ref2$color;
+  return React.createElement('div', { className: 'spin', style: { width: size, height: size, border: '3px solid ' + C.sageSoft, borderTopColor: color, borderRadius: '50%' } });
+};
 
 function MealPlanner() {
-  const [apiUrl, setApiUrl] = useState('');
-  const [apiUrlInput, setApiUrlInput] = useState('');
-  const [ready, setReady] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  var _this = this;
 
-  const [meals, setMeals] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [weekPlan, setWeekPlan] = useState({});
-  const [lastWeekPlan, setLastWeekPlan] = useState({});
-  const [weeksList, setWeeksList] = useState([]);
+  var _useState = useState('');
 
-  const [showSettings, setShowSettings] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
-  const [historyWeek, setHistoryWeek] = useState(null);
-  const [historyRows, setHistoryRows] = useState({});
+  var _useState2 = _slicedToArray(_useState, 2);
 
-  const [activeSlot, setActiveSlot] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [newCategoryText, setNewCategoryText] = useState('');
-  const [showNewCategory, setShowNewCategory] = useState(false);
-  const [newMealText, setNewMealText] = useState('');
-  const [busy, setBusy] = useState(false);
+  var apiUrl = _useState2[0];
+  var setApiUrl = _useState2[1];
 
-  const monday = getMonday(new Date());
-  const weekStart = isoDate(monday);
-  const lastMonday = addDays(monday, -7);
-  const lastWeekStart = isoDate(lastMonday);
-  const days = DAY_NAMES.map((name, i) => ({ name, date: addDays(monday, i), key: isoDate(addDays(monday, i)) }));
+  var _useState3 = useState('');
 
-  const apiGet = useCallback(async (action, params = {}) => {
-    const qs = new URLSearchParams({ action, ...params }).toString();
-    const res = await fetch(`${apiUrl}?${qs}`);
-    if (!res.ok) throw new Error(`Request failed (${res.status})`);
-    return res.json();
+  var _useState32 = _slicedToArray(_useState3, 2);
+
+  var apiUrlInput = _useState32[0];
+  var setApiUrlInput = _useState32[1];
+
+  var _useState4 = useState(false);
+
+  var _useState42 = _slicedToArray(_useState4, 2);
+
+  var ready = _useState42[0];
+  var setReady = _useState42[1];
+
+  var _useState5 = useState(true);
+
+  var _useState52 = _slicedToArray(_useState5, 2);
+
+  var loading = _useState52[0];
+  var setLoading = _useState52[1];
+
+  var _useState6 = useState('');
+
+  var _useState62 = _slicedToArray(_useState6, 2);
+
+  var error = _useState62[0];
+  var setError = _useState62[1];
+
+  var _useState7 = useState([]);
+
+  var _useState72 = _slicedToArray(_useState7, 2);
+
+  var meals = _useState72[0];
+  var setMeals = _useState72[1];
+
+  var _useState8 = useState([]);
+
+  var _useState82 = _slicedToArray(_useState8, 2);
+
+  var categories = _useState82[0];
+  var setCategories = _useState82[1];
+
+  var _useState9 = useState({});
+
+  var _useState92 = _slicedToArray(_useState9, 2);
+
+  var weekPlan = _useState92[0];
+  var setWeekPlan = _useState92[1];
+
+  var _useState10 = useState({});
+
+  var _useState102 = _slicedToArray(_useState10, 2);
+
+  var lastWeekPlan = _useState102[0];
+  var setLastWeekPlan = _useState102[1];
+
+  var _useState11 = useState([]);
+
+  var _useState112 = _slicedToArray(_useState11, 2);
+
+  var weeksList = _useState112[0];
+  var setWeeksList = _useState112[1];
+
+  var _useState12 = useState(false);
+
+  var _useState122 = _slicedToArray(_useState12, 2);
+
+  var showSettings = _useState122[0];
+  var setShowSettings = _useState122[1];
+
+  var _useState13 = useState(false);
+
+  var _useState132 = _slicedToArray(_useState13, 2);
+
+  var showHistory = _useState132[0];
+  var setShowHistory = _useState132[1];
+
+  var _useState14 = useState(null);
+
+  var _useState142 = _slicedToArray(_useState14, 2);
+
+  var historyWeek = _useState142[0];
+  var setHistoryWeek = _useState142[1];
+
+  var _useState15 = useState({});
+
+  var _useState152 = _slicedToArray(_useState15, 2);
+
+  var historyRows = _useState152[0];
+  var setHistoryRows = _useState152[1];
+
+  var _useState16 = useState(null);
+
+  var _useState162 = _slicedToArray(_useState16, 2);
+
+  var activeSlot = _useState162[0];
+  var setActiveSlot = _useState162[1];
+
+  var _useState17 = useState(null);
+
+  var _useState172 = _slicedToArray(_useState17, 2);
+
+  var selectedCategory = _useState172[0];
+  var setSelectedCategory = _useState172[1];
+
+  var _useState18 = useState('');
+
+  var _useState182 = _slicedToArray(_useState18, 2);
+
+  var newCategoryText = _useState182[0];
+  var setNewCategoryText = _useState182[1];
+
+  var _useState19 = useState(false);
+
+  var _useState192 = _slicedToArray(_useState19, 2);
+
+  var showNewCategory = _useState192[0];
+  var setShowNewCategory = _useState192[1];
+
+  var _useState20 = useState('');
+
+  var _useState202 = _slicedToArray(_useState20, 2);
+
+  var newMealText = _useState202[0];
+  var setNewMealText = _useState202[1];
+
+  var _useState21 = useState(false);
+
+  var _useState212 = _slicedToArray(_useState21, 2);
+
+  var busy = _useState212[0];
+  var setBusy = _useState212[1];
+
+  var monday = getMonday(new Date());
+  var weekStart = isoDate(monday);
+  var lastMonday = addDays(monday, -7);
+  var lastWeekStart = isoDate(lastMonday);
+  var days = DAY_NAMES.map(function (name, i) {
+    return { name: name, date: addDays(monday, i), key: isoDate(addDays(monday, i)) };
+  });
+
+  var apiGet = useCallback(function callee$1$0(action) {
+    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var qs, res;
+    return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          qs = new URLSearchParams(_extends({ action: action }, params)).toString();
+          context$2$0.next = 3;
+          return regeneratorRuntime.awrap(fetch(apiUrl + '?' + qs));
+
+        case 3:
+          res = context$2$0.sent;
+
+          if (res.ok) {
+            context$2$0.next = 6;
+            break;
+          }
+
+          throw new Error('Request failed (' + res.status + ')');
+
+        case 6:
+          return context$2$0.abrupt('return', res.json());
+
+        case 7:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, _this);
   }, [apiUrl]);
 
-  const apiPost = useCallback(async (action, payload = {}) => {
-    const res = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action, ...payload }),
-    });
-    if (!res.ok) throw new Error(`Request failed (${res.status})`);
-    return res.json();
+  var apiPost = useCallback(function callee$1$0(action) {
+    var payload = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+    var res;
+    return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          context$2$0.next = 2;
+          return regeneratorRuntime.awrap(fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(_extends({ action: action }, payload))
+          }));
+
+        case 2:
+          res = context$2$0.sent;
+
+          if (res.ok) {
+            context$2$0.next = 5;
+            break;
+          }
+
+          throw new Error('Request failed (' + res.status + ')');
+
+        case 5:
+          return context$2$0.abrupt('return', res.json());
+
+        case 6:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, _this);
   }, [apiUrl]);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) { setApiUrl(stored); setReady(true); } else { setLoading(false); }
-  }, []);
-
-  const loadAll = useCallback(async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const [mealsRes, catsRes, weekRes, lastWeekRes] = await Promise.all([
-        apiGet('getMeals'), apiGet('getCategories'),
-        apiGet('getWeek', { weekStart }), apiGet('getWeek', { weekStart: lastWeekStart }),
-      ]);
-      if (mealsRes.error) throw new Error(mealsRes.error);
-      setMeals(mealsRes);
-      setCategories(catsRes);
-      const wp = {};
-      (weekRes || []).forEach(r => { if (r.status === 'assigned' || r.status === 'skipped') wp[`${r.day}-${r.slot}`] = r; });
-      setWeekPlan(wp);
-      const lwp = {};
-      (lastWeekRes || []).forEach(r => { if (r.status === 'assigned') lwp[`${r.day}-${r.slot}`] = r; });
-      setLastWeekPlan(lwp);
-    } catch (e) {
-      setError(e.message || 'Could not reach the sheet. Check the API URL in Settings.');
-    } finally {
+  useEffect(function () {
+    var stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      setApiUrl(stored);setReady(true);
+    } else {
       setLoading(false);
     }
+  }, []);
+
+  var loadAll = useCallback(function callee$1$0() {
+    return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+      var _this2 = this;
+
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          setLoading(true);
+          setError('');
+          context$2$0.prev = 2;
+          context$2$0.next = 5;
+          return regeneratorRuntime.awrap((function callee$2$0() {
+            var _ref3, _ref32, mealsRes, catsRes, weekRes, lastWeekRes, wp, lwp;
+
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+              while (1) switch (context$3$0.prev = context$3$0.next) {
+                case 0:
+                  context$3$0.next = 2;
+                  return regeneratorRuntime.awrap(Promise.all([apiGet('getMeals'), apiGet('getCategories'), apiGet('getWeek', { weekStart: weekStart }), apiGet('getWeek', { weekStart: lastWeekStart })]));
+
+                case 2:
+                  _ref3 = context$3$0.sent;
+                  _ref32 = _slicedToArray(_ref3, 4);
+                  mealsRes = _ref32[0];
+                  catsRes = _ref32[1];
+                  weekRes = _ref32[2];
+                  lastWeekRes = _ref32[3];
+
+                  if (!mealsRes.error) {
+                    context$3$0.next = 10;
+                    break;
+                  }
+
+                  throw new Error(mealsRes.error);
+
+                case 10:
+                  setMeals(mealsRes);
+                  setCategories(catsRes);
+                  wp = {};
+
+                  (weekRes || []).forEach(function (r) {
+                    if (r.status === 'assigned' || r.status === 'skipped') wp[r.day + '-' + r.slot] = r;
+                  });
+                  setWeekPlan(wp);
+                  lwp = {};
+
+                  (lastWeekRes || []).forEach(function (r) {
+                    if (r.status === 'assigned') lwp[r.day + '-' + r.slot] = r;
+                  });
+                  setLastWeekPlan(lwp);
+
+                case 18:
+                case 'end':
+                  return context$3$0.stop();
+              }
+            }, null, _this2);
+          })());
+
+        case 5:
+          context$2$0.next = 10;
+          break;
+
+        case 7:
+          context$2$0.prev = 7;
+          context$2$0.t0 = context$2$0['catch'](2);
+
+          setError(context$2$0.t0.message || 'Could not reach the sheet. Check the API URL in Settings.');
+
+        case 10:
+          context$2$0.prev = 10;
+
+          setLoading(false);
+          return context$2$0.finish(10);
+
+        case 13:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, _this, [[2, 7, 10, 13]]);
   }, [apiGet, weekStart, lastWeekStart]);
 
-  useEffect(() => { if (ready && apiUrl) loadAll(); }, [ready, apiUrl, loadAll]);
+  useEffect(function () {
+    if (ready && apiUrl) loadAll();
+  }, [ready, apiUrl, loadAll]);
 
   function saveApiUrl() {
-    const trimmed = apiUrlInput.trim();
+    var trimmed = apiUrlInput.trim();
     if (!trimmed) return;
     localStorage.setItem(STORAGE_KEY, trimmed);
     setApiUrl(trimmed);
@@ -153,334 +460,833 @@ function MealPlanner() {
   }
 
   function openSlot(dayName, slot) {
-    setActiveSlot({ day: dayName, slot });
+    setActiveSlot({ day: dayName, slot: slot });
     setSelectedCategory(null);
     setShowNewCategory(false);
     setNewCategoryText('');
     setNewMealText('');
   }
-  function closeSlot() { setActiveSlot(null); setSelectedCategory(null); }
-
-  async function assignMeal(mealId, mealName) {
-    if (!activeSlot) return;
-    setBusy(true);
-    try {
-      await apiPost('setSlot', { weekStart, day: activeSlot.day, slot: activeSlot.slot, mealId, mealName, status: 'assigned' });
-      setWeekPlan(prev => ({ ...prev, [`${activeSlot.day}-${activeSlot.slot}`]: { day: activeSlot.day, slot: activeSlot.slot, mealId, mealName, status: 'assigned' } }));
-      closeSlot();
-    } catch (e) { setError(e.message); } finally { setBusy(false); }
+  function closeSlot() {
+    setActiveSlot(null);setSelectedCategory(null);
   }
 
-  async function skipSlot() {
-    if (!activeSlot) return;
-    setBusy(true);
-    try {
-      await apiPost('setSlot', { weekStart, day: activeSlot.day, slot: activeSlot.slot, mealId: '', mealName: '', status: 'skipped' });
-      setWeekPlan(prev => ({ ...prev, [`${activeSlot.day}-${activeSlot.slot}`]: { day: activeSlot.day, slot: activeSlot.slot, mealId: '', mealName: '', status: 'skipped' } }));
-      closeSlot();
-    } catch (e) { setError(e.message); } finally { setBusy(false); }
+  function assignMeal(mealId, mealName) {
+    return regeneratorRuntime.async(function assignMeal$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          if (activeSlot) {
+            context$2$0.next = 2;
+            break;
+          }
+
+          return context$2$0.abrupt('return');
+
+        case 2:
+          setBusy(true);
+          context$2$0.prev = 3;
+          context$2$0.next = 6;
+          return regeneratorRuntime.awrap(apiPost('setSlot', { weekStart: weekStart, day: activeSlot.day, slot: activeSlot.slot, mealId: mealId, mealName: mealName, status: 'assigned' }));
+
+        case 6:
+          setWeekPlan(function (prev) {
+            return _extends({}, prev, _defineProperty({}, activeSlot.day + '-' + activeSlot.slot, { day: activeSlot.day, slot: activeSlot.slot, mealId: mealId, mealName: mealName, status: 'assigned' }));
+          });
+          closeSlot();
+          context$2$0.next = 13;
+          break;
+
+        case 10:
+          context$2$0.prev = 10;
+          context$2$0.t0 = context$2$0['catch'](3);
+          setError(context$2$0.t0.message);
+
+        case 13:
+          context$2$0.prev = 13;
+          setBusy(false);return context$2$0.finish(13);
+
+        case 16:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[3, 10, 13, 16]]);
   }
 
-  async function clearSlot(dayName, slot) {
-    setBusy(true);
-    try {
-      await apiPost('setSlot', { weekStart, day: dayName, slot, mealId: '', mealName: '', status: '' });
-      setWeekPlan(prev => { const next = { ...prev }; delete next[`${dayName}-${slot}`]; return next; });
-    } catch (e) { setError(e.message); } finally { setBusy(false); }
+  function skipSlot() {
+    return regeneratorRuntime.async(function skipSlot$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          if (activeSlot) {
+            context$2$0.next = 2;
+            break;
+          }
+
+          return context$2$0.abrupt('return');
+
+        case 2:
+          setBusy(true);
+          context$2$0.prev = 3;
+          context$2$0.next = 6;
+          return regeneratorRuntime.awrap(apiPost('setSlot', { weekStart: weekStart, day: activeSlot.day, slot: activeSlot.slot, mealId: '', mealName: '', status: 'skipped' }));
+
+        case 6:
+          setWeekPlan(function (prev) {
+            return _extends({}, prev, _defineProperty({}, activeSlot.day + '-' + activeSlot.slot, { day: activeSlot.day, slot: activeSlot.slot, mealId: '', mealName: '', status: 'skipped' }));
+          });
+          closeSlot();
+          context$2$0.next = 13;
+          break;
+
+        case 10:
+          context$2$0.prev = 10;
+          context$2$0.t0 = context$2$0['catch'](3);
+          setError(context$2$0.t0.message);
+
+        case 13:
+          context$2$0.prev = 13;
+          setBusy(false);return context$2$0.finish(13);
+
+        case 16:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[3, 10, 13, 16]]);
   }
 
-  async function addCategory() {
-    const name = newCategoryText.trim();
-    if (!name) return;
-    setBusy(true);
-    try {
-      await apiPost('addCategory', { name });
-      setCategories(prev => (prev.includes(name) ? prev : [...prev, name]));
-      setSelectedCategory(name);
-      setShowNewCategory(false);
-      setNewCategoryText('');
-    } catch (e) { setError(e.message); } finally { setBusy(false); }
+  function clearSlot(dayName, slot) {
+    return regeneratorRuntime.async(function clearSlot$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          setBusy(true);
+          context$2$0.prev = 1;
+          context$2$0.next = 4;
+          return regeneratorRuntime.awrap(apiPost('setSlot', { weekStart: weekStart, day: dayName, slot: slot, mealId: '', mealName: '', status: '' }));
+
+        case 4:
+          setWeekPlan(function (prev) {
+            var next = _extends({}, prev);delete next[dayName + '-' + slot];return next;
+          });
+          context$2$0.next = 10;
+          break;
+
+        case 7:
+          context$2$0.prev = 7;
+          context$2$0.t0 = context$2$0['catch'](1);
+          setError(context$2$0.t0.message);
+
+        case 10:
+          context$2$0.prev = 10;
+          setBusy(false);return context$2$0.finish(10);
+
+        case 13:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[1, 7, 10, 13]]);
   }
 
-  async function addAndAssignMeal(category, slotType) {
-    const name = newMealText.trim();
-    if (!name) return;
-    setBusy(true);
-    try {
-      const res = await apiPost('addMeal', { name, category: category || '', slot: slotType });
-      setMeals(prev => [...prev, res]);
-      setNewMealText('');
-      await assignMeal(res.id, res.name);
-    } catch (e) { setError(e.message); setBusy(false); }
+  function addCategory() {
+    var name;
+    return regeneratorRuntime.async(function addCategory$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          name = newCategoryText.trim();
+
+          if (name) {
+            context$2$0.next = 3;
+            break;
+          }
+
+          return context$2$0.abrupt('return');
+
+        case 3:
+          setBusy(true);
+          context$2$0.prev = 4;
+          context$2$0.next = 7;
+          return regeneratorRuntime.awrap(apiPost('addCategory', { name: name }));
+
+        case 7:
+          setCategories(function (prev) {
+            return prev.includes(name) ? prev : [].concat(_toConsumableArray(prev), [name]);
+          });
+          setSelectedCategory(name);
+          setShowNewCategory(false);
+          setNewCategoryText('');
+          context$2$0.next = 16;
+          break;
+
+        case 13:
+          context$2$0.prev = 13;
+          context$2$0.t0 = context$2$0['catch'](4);
+          setError(context$2$0.t0.message);
+
+        case 16:
+          context$2$0.prev = 16;
+          setBusy(false);return context$2$0.finish(16);
+
+        case 19:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[4, 13, 16, 19]]);
   }
 
-  async function loadWeeksList() {
-    setShowHistory(true);
-    try {
-      const list = await apiGet('getWeeksList');
-      setWeeksList(list.filter(w => w !== weekStart));
-    } catch (e) { setError(e.message); }
+  function addAndAssignMeal(category, slotType) {
+    var name;
+    return regeneratorRuntime.async(function addAndAssignMeal$(context$2$0) {
+      var _this3 = this;
+
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          name = newMealText.trim();
+
+          if (name) {
+            context$2$0.next = 3;
+            break;
+          }
+
+          return context$2$0.abrupt('return');
+
+        case 3:
+          setBusy(true);
+          context$2$0.prev = 4;
+          context$2$0.next = 7;
+          return regeneratorRuntime.awrap((function callee$2$0() {
+            var res;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+              while (1) switch (context$3$0.prev = context$3$0.next) {
+                case 0:
+                  context$3$0.next = 2;
+                  return regeneratorRuntime.awrap(apiPost('addMeal', { name: name, category: category || '', slot: slotType }));
+
+                case 2:
+                  res = context$3$0.sent;
+
+                  setMeals(function (prev) {
+                    return [].concat(_toConsumableArray(prev), [res]);
+                  });
+                  setNewMealText('');
+                  context$3$0.next = 7;
+                  return regeneratorRuntime.awrap(assignMeal(res.id, res.name));
+
+                case 7:
+                case 'end':
+                  return context$3$0.stop();
+              }
+            }, null, _this3);
+          })());
+
+        case 7:
+          context$2$0.next = 13;
+          break;
+
+        case 9:
+          context$2$0.prev = 9;
+          context$2$0.t0 = context$2$0['catch'](4);
+          setError(context$2$0.t0.message);setBusy(false);
+        case 13:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[4, 9]]);
   }
-  async function viewWeek(ws) {
-    setHistoryWeek(ws);
-    try {
-      const rows = await apiGet('getWeek', { weekStart: ws });
-      const obj = {};
-      rows.forEach(r => { obj[`${r.day}-${r.slot}`] = r; });
-      setHistoryRows(obj);
-    } catch (e) { setError(e.message); }
+
+  function loadWeeksList() {
+    var list;
+    return regeneratorRuntime.async(function loadWeeksList$(context$2$0) {
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          setShowHistory(true);
+          context$2$0.prev = 1;
+          context$2$0.next = 4;
+          return regeneratorRuntime.awrap(apiGet('getWeeksList'));
+
+        case 4:
+          list = context$2$0.sent;
+
+          setWeeksList(list.filter(function (w) {
+            return w !== weekStart;
+          }));
+          context$2$0.next = 11;
+          break;
+
+        case 8:
+          context$2$0.prev = 8;
+          context$2$0.t0 = context$2$0['catch'](1);
+          setError(context$2$0.t0.message);
+        case 11:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[1, 8]]);
+  }
+  function viewWeek(ws) {
+    return regeneratorRuntime.async(function viewWeek$(context$2$0) {
+      var _this4 = this;
+
+      while (1) switch (context$2$0.prev = context$2$0.next) {
+        case 0:
+          setHistoryWeek(ws);
+          context$2$0.prev = 1;
+          context$2$0.next = 4;
+          return regeneratorRuntime.awrap((function callee$2$0() {
+            var rows, obj;
+            return regeneratorRuntime.async(function callee$2$0$(context$3$0) {
+              while (1) switch (context$3$0.prev = context$3$0.next) {
+                case 0:
+                  context$3$0.next = 2;
+                  return regeneratorRuntime.awrap(apiGet('getWeek', { weekStart: ws }));
+
+                case 2:
+                  rows = context$3$0.sent;
+                  obj = {};
+
+                  rows.forEach(function (r) {
+                    obj[r.day + '-' + r.slot] = r;
+                  });
+                  setHistoryRows(obj);
+
+                case 6:
+                case 'end':
+                  return context$3$0.stop();
+              }
+            }, null, _this4);
+          })());
+
+        case 4:
+          context$2$0.next = 9;
+          break;
+
+        case 6:
+          context$2$0.prev = 6;
+          context$2$0.t0 = context$2$0['catch'](1);
+          setError(context$2$0.t0.message);
+        case 9:
+        case 'end':
+          return context$2$0.stop();
+      }
+    }, null, this, [[1, 6]]);
   }
 
   if (!ready) {
-    return (
-      <div style={{ background: C.paper, minHeight: '100vh' }} className="flex items-center justify-center p-6">
-        <div style={{ background: C.paperCard, borderColor: C.line }} className="w-full max-w-sm rounded-2xl border p-6 shadow-sm">
-          <h1 style={{ color: C.ink, fontFamily: 'Georgia, serif' }} className="text-2xl mb-1">This Week's Menu</h1>
-          <p style={{ color: C.inkSoft }} className="text-sm mb-5">Paste the Web app URL from your Apps Script deployment to connect your sheet.</p>
-          <input value={apiUrlInput} onChange={e => setApiUrlInput(e.target.value)} placeholder="https://script.google.com/macros/s/.../exec"
-            style={{ borderColor: C.line, color: C.ink }} className="w-full rounded-lg border px-3 py-2 text-sm mb-3 outline-none" />
-          <button onClick={saveApiUrl} style={{ background: C.sage }} className="w-full text-white rounded-lg py-2.5 text-sm font-medium active:opacity-80">Connect</button>
-        </div>
-      </div>
+    return React.createElement(
+      'div',
+      { style: { background: C.paper, minHeight: '100vh' }, className: 'flex items-center justify-center p-6' },
+      React.createElement(
+        'div',
+        { style: { background: C.paperCard, borderColor: C.line }, className: 'w-full max-w-sm rounded-2xl border p-6 shadow-sm' },
+        React.createElement(
+          'h1',
+          { style: { color: C.ink, fontFamily: 'Georgia, serif' }, className: 'text-2xl mb-1' },
+          'This Week\'s Menu'
+        ),
+        React.createElement(
+          'p',
+          { style: { color: C.inkSoft }, className: 'text-sm mb-5' },
+          'Paste the Web app URL from your Apps Script deployment to connect your sheet.'
+        ),
+        React.createElement('input', { value: apiUrlInput, onChange: function (e) {
+            return setApiUrlInput(e.target.value);
+          }, placeholder: 'https://script.google.com/macros/s/.../exec',
+          style: { borderColor: C.line, color: C.ink }, className: 'w-full rounded-lg border px-3 py-2 text-sm mb-3 outline-none' }),
+        React.createElement(
+          'button',
+          { onClick: saveApiUrl, style: { background: C.sage }, className: 'w-full text-white rounded-lg py-2.5 text-sm font-medium active:opacity-80' },
+          'Connect'
+        )
+      )
     );
   }
 
-  return (
-    <div style={{ background: C.paper, minHeight: '100vh' }} className="pb-10">
-      <div style={{ background: C.sage }} className="px-5 pt-6 pb-5 rounded-b-3xl shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <p style={{ color: C.mustardSoft }} className="text-xs uppercase tracking-widest mb-0.5">Week of</p>
-            <h1 style={{ fontFamily: 'Georgia, serif' }} className="text-white text-2xl">{prettyDate(monday)} – {prettyDate(addDays(monday, 6))}</h1>
-          </div>
-          <div className="flex gap-1">
-            <button onClick={loadWeeksList} className="p-2 rounded-full active:bg-white/10"><IconHistory color="white" /></button>
-            <button onClick={() => { setApiUrlInput(apiUrl); setShowSettings(true); }} className="p-2 rounded-full active:bg-white/10"><IconSettings color="white" /></button>
-          </div>
-        </div>
-      </div>
-
-      {loading && <div className="flex items-center justify-center py-16"><IconLoader /></div>}
-
-      {error && !loading && (
-        <div style={{ background: '#FBEAE7', color: C.danger, borderColor: C.danger }} className="mx-4 mt-4 border rounded-lg p-3 text-sm">{error}</div>
-      )}
-
-      {!loading && (
-        <div className="px-4 pt-4 space-y-3">
-          {days.map(day => (
-            <DayCard key={day.key} day={day} weekPlan={weekPlan} onOpenSlot={openSlot} onClearSlot={clearSlot} />
-          ))}
-        </div>
-      )}
-
-      {activeSlot && (
-        <SlotSheet
-          activeSlot={activeSlot} categories={categories} meals={meals} weekPlan={weekPlan} lastWeekPlan={lastWeekPlan}
-          selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
-          showNewCategory={showNewCategory} setShowNewCategory={setShowNewCategory}
-          newCategoryText={newCategoryText} setNewCategoryText={setNewCategoryText}
-          newMealText={newMealText} setNewMealText={setNewMealText} busy={busy}
-          onClose={closeSlot} onAssign={assignMeal} onSkip={skipSlot} onAddCategory={addCategory} onAddAndAssignMeal={addAndAssignMeal}
-        />
-      )}
-
-      {showSettings && (
-        <Sheet onClose={() => setShowSettings(false)} title="Settings">
-          <p style={{ color: C.inkSoft }} className="text-sm mb-3">Apps Script Web app URL</p>
-          <input value={apiUrlInput} onChange={e => setApiUrlInput(e.target.value)} style={{ borderColor: C.line, color: C.ink }}
-            className="w-full rounded-lg border px-3 py-2 text-sm mb-3 outline-none" />
-          <button onClick={saveApiUrl} style={{ background: C.sage }} className="w-full text-white rounded-lg py-2.5 text-sm font-medium mb-2">Save & Reload</button>
-        </Sheet>
-      )}
-
-      {showHistory && (
-        <Sheet onClose={() => { setShowHistory(false); setHistoryWeek(null); }} title="Past Weeks">
-          {!historyWeek && (
-            <div className="space-y-1">
-              {weeksList.length === 0 && <p style={{ color: C.inkSoft }} className="text-sm">No saved weeks yet.</p>}
-              {weeksList.map(ws => (
-                <button key={ws} onClick={() => viewWeek(ws)} style={{ borderColor: C.line, color: C.ink }}
-                  className="w-full text-left border rounded-lg px-3 py-2.5 text-sm flex items-center justify-between">
-                  Week of {ws}<IconChevronRight color={C.inkSoft} />
-                </button>
-              ))}
-            </div>
-          )}
-          {historyWeek && (
-            <div>
-              <button onClick={() => setHistoryWeek(null)} className="flex items-center gap-1 text-sm mb-3" style={{ color: C.sage }}>
-                <IconChevronLeft /> Back to weeks
-              </button>
-              <div className="space-y-2">
-                {DAY_NAMES.map(dn => (
-                  <div key={dn} style={{ borderColor: C.line }} className="border rounded-lg p-2.5">
-                    <p style={{ color: C.ink }} className="text-sm font-medium mb-1">{dn}</p>
-                    {['Lunch', 'Dinner'].map(slot => {
-                      const row = historyRows[`${dn}-${slot}`];
-                      return <p key={slot} style={{ color: C.inkSoft }} className="text-xs">{slot}: {row ? (row.status === 'skipped' ? 'Skipped' : row.mealName) : '—'}</p>;
-                    })}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </Sheet>
-      )}
-    </div>
+  return React.createElement(
+    'div',
+    { style: { background: C.paper, minHeight: '100vh' }, className: 'pb-10' },
+    React.createElement(
+      'div',
+      { style: { background: C.sage }, className: 'px-5 pt-6 pb-5 rounded-b-3xl shadow-sm' },
+      React.createElement(
+        'div',
+        { className: 'flex items-center justify-between' },
+        React.createElement(
+          'div',
+          null,
+          React.createElement(
+            'p',
+            { style: { color: C.mustardSoft }, className: 'text-xs uppercase tracking-widest mb-0.5' },
+            'Week of'
+          ),
+          React.createElement(
+            'h1',
+            { style: { fontFamily: 'Georgia, serif' }, className: 'text-white text-2xl' },
+            prettyDate(monday),
+            ' – ',
+            prettyDate(addDays(monday, 6))
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'flex gap-1' },
+          React.createElement(
+            'button',
+            { onClick: loadWeeksList, className: 'p-2 rounded-full active:bg-white/10' },
+            React.createElement(IconHistory, { color: 'white' })
+          ),
+          React.createElement(
+            'button',
+            { onClick: function () {
+                setApiUrlInput(apiUrl);setShowSettings(true);
+              }, className: 'p-2 rounded-full active:bg-white/10' },
+            React.createElement(IconSettings, { color: 'white' })
+          )
+        )
+      )
+    ),
+    loading && React.createElement(
+      'div',
+      { className: 'flex items-center justify-center py-16' },
+      React.createElement(IconLoader, null)
+    ),
+    error && !loading && React.createElement(
+      'div',
+      { style: { background: '#FBEAE7', color: C.danger, borderColor: C.danger }, className: 'mx-4 mt-4 border rounded-lg p-3 text-sm' },
+      error
+    ),
+    !loading && React.createElement(
+      'div',
+      { className: 'px-4 pt-4 space-y-3' },
+      days.map(function (day) {
+        return React.createElement(DayCard, { key: day.key, day: day, weekPlan: weekPlan, onOpenSlot: openSlot, onClearSlot: clearSlot });
+      })
+    ),
+    activeSlot && React.createElement(SlotSheet, {
+      activeSlot: activeSlot, categories: categories, meals: meals, weekPlan: weekPlan, lastWeekPlan: lastWeekPlan,
+      selectedCategory: selectedCategory, setSelectedCategory: setSelectedCategory,
+      showNewCategory: showNewCategory, setShowNewCategory: setShowNewCategory,
+      newCategoryText: newCategoryText, setNewCategoryText: setNewCategoryText,
+      newMealText: newMealText, setNewMealText: setNewMealText, busy: busy,
+      onClose: closeSlot, onAssign: assignMeal, onSkip: skipSlot, onAddCategory: addCategory, onAddAndAssignMeal: addAndAssignMeal
+    }),
+    showSettings && React.createElement(
+      Sheet,
+      { onClose: function () {
+          return setShowSettings(false);
+        }, title: 'Settings' },
+      React.createElement(
+        'p',
+        { style: { color: C.inkSoft }, className: 'text-sm mb-3' },
+        'Apps Script Web app URL'
+      ),
+      React.createElement('input', { value: apiUrlInput, onChange: function (e) {
+          return setApiUrlInput(e.target.value);
+        }, style: { borderColor: C.line, color: C.ink },
+        className: 'w-full rounded-lg border px-3 py-2 text-sm mb-3 outline-none' }),
+      React.createElement(
+        'button',
+        { onClick: saveApiUrl, style: { background: C.sage }, className: 'w-full text-white rounded-lg py-2.5 text-sm font-medium mb-2' },
+        'Save & Reload'
+      )
+    ),
+    showHistory && React.createElement(
+      Sheet,
+      { onClose: function () {
+          setShowHistory(false);setHistoryWeek(null);
+        }, title: 'Past Weeks' },
+      !historyWeek && React.createElement(
+        'div',
+        { className: 'space-y-1' },
+        weeksList.length === 0 && React.createElement(
+          'p',
+          { style: { color: C.inkSoft }, className: 'text-sm' },
+          'No saved weeks yet.'
+        ),
+        weeksList.map(function (ws) {
+          return React.createElement(
+            'button',
+            { key: ws, onClick: function () {
+                return viewWeek(ws);
+              }, style: { borderColor: C.line, color: C.ink },
+              className: 'w-full text-left border rounded-lg px-3 py-2.5 text-sm flex items-center justify-between' },
+            'Week of ',
+            ws,
+            React.createElement(IconChevronRight, { color: C.inkSoft })
+          );
+        })
+      ),
+      historyWeek && React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'button',
+          { onClick: function () {
+              return setHistoryWeek(null);
+            }, className: 'flex items-center gap-1 text-sm mb-3', style: { color: C.sage } },
+          React.createElement(IconChevronLeft, null),
+          ' Back to weeks'
+        ),
+        React.createElement(
+          'div',
+          { className: 'space-y-2' },
+          DAY_NAMES.map(function (dn) {
+            return React.createElement(
+              'div',
+              { key: dn, style: { borderColor: C.line }, className: 'border rounded-lg p-2.5' },
+              React.createElement(
+                'p',
+                { style: { color: C.ink }, className: 'text-sm font-medium mb-1' },
+                dn
+              ),
+              ['Lunch', 'Dinner'].map(function (slot) {
+                var row = historyRows[dn + '-' + slot];
+                return React.createElement(
+                  'p',
+                  { key: slot, style: { color: C.inkSoft }, className: 'text-xs' },
+                  slot,
+                  ': ',
+                  row ? row.status === 'skipped' ? 'Skipped' : row.mealName : '—'
+                );
+              })
+            );
+          })
+        )
+      )
+    )
   );
 }
 
-function DayCard({ day, weekPlan, onOpenSlot, onClearSlot }) {
-  return (
-    <div style={{ background: C.paperCard, borderColor: C.line }} className="rounded-2xl border overflow-hidden">
-      <div style={{ borderColor: C.line }} className="flex items-baseline justify-between px-4 pt-3 pb-2 border-b">
-        <h2 style={{ color: C.ink, fontFamily: 'Georgia, serif' }} className="text-lg">{day.name}</h2>
-        <span style={{ color: C.inkSoft, fontFamily: 'monospace' }} className="text-xs">{prettyDate(day.date)}</span>
-      </div>
-      <SlotRow label="Lunch" accent={C.mustard} entry={weekPlan[`${day.name}-Lunch`]} onOpen={() => onOpenSlot(day.name, 'Lunch')} onClear={() => onClearSlot(day.name, 'Lunch')} />
-      <div style={{ borderColor: C.line }} className="border-t border-dashed mx-4" />
-      <SlotRow label="Dinner" accent={C.sage} entry={weekPlan[`${day.name}-Dinner`]} onOpen={() => onOpenSlot(day.name, 'Dinner')} onClear={() => onClearSlot(day.name, 'Dinner')} />
-    </div>
+function DayCard(_ref4) {
+  var day = _ref4.day;
+  var weekPlan = _ref4.weekPlan;
+  var onOpenSlot = _ref4.onOpenSlot;
+  var onClearSlot = _ref4.onClearSlot;
+
+  return React.createElement(
+    'div',
+    { style: { background: C.paperCard, borderColor: C.line }, className: 'rounded-2xl border overflow-hidden' },
+    React.createElement(
+      'div',
+      { style: { borderColor: C.line }, className: 'flex items-baseline justify-between px-4 pt-3 pb-2 border-b' },
+      React.createElement(
+        'h2',
+        { style: { color: C.ink, fontFamily: 'Georgia, serif' }, className: 'text-lg' },
+        day.name
+      ),
+      React.createElement(
+        'span',
+        { style: { color: C.inkSoft, fontFamily: 'monospace' }, className: 'text-xs' },
+        prettyDate(day.date)
+      )
+    ),
+    React.createElement(SlotRow, { label: 'Lunch', accent: C.mustard, entry: weekPlan[day.name + '-Lunch'], onOpen: function () {
+        return onOpenSlot(day.name, 'Lunch');
+      }, onClear: function () {
+        return onClearSlot(day.name, 'Lunch');
+      } }),
+    React.createElement('div', { style: { borderColor: C.line }, className: 'border-t border-dashed mx-4' }),
+    React.createElement(SlotRow, { label: 'Dinner', accent: C.sage, entry: weekPlan[day.name + '-Dinner'], onOpen: function () {
+        return onOpenSlot(day.name, 'Dinner');
+      }, onClear: function () {
+        return onClearSlot(day.name, 'Dinner');
+      } })
   );
 }
 
-function SlotRow({ label, accent, entry, onOpen, onClear }) {
-  const isSkipped = entry && entry.status === 'skipped';
-  const isFilled = entry && entry.status === 'assigned';
-  return (
-    <div className="flex items-center px-4 py-2.5">
-      <span style={{ background: accent }} className="w-1.5 h-1.5 rounded-full mr-2.5 shrink-0" />
-      <button onClick={onOpen} className="flex-1 text-left flex items-center justify-between min-w-0">
-        <span style={{ color: C.inkSoft }} className="text-xs uppercase tracking-wide w-14 shrink-0">{label}</span>
-        <span style={{ color: isFilled ? C.ink : C.inkSoft }} className={`flex-1 text-sm truncate px-2 ${isSkipped ? 'italic' : ''}`}>
-          {isFilled ? entry.mealName : isSkipped ? 'Skipped' : 'Tap to add'}
-        </span>
-        <IconChevronRight color={C.inkSoft} />
-      </button>
-      {(isFilled || isSkipped) && <button onClick={onClear} className="ml-1 p-1 shrink-0"><IconTrash size={14} color={C.inkSoft} /></button>}
-    </div>
+function SlotRow(_ref5) {
+  var label = _ref5.label;
+  var accent = _ref5.accent;
+  var entry = _ref5.entry;
+  var onOpen = _ref5.onOpen;
+  var onClear = _ref5.onClear;
+
+  var isSkipped = entry && entry.status === 'skipped';
+  var isFilled = entry && entry.status === 'assigned';
+  return React.createElement(
+    'div',
+    { className: 'flex items-center px-4 py-2.5' },
+    React.createElement('span', { style: { background: accent }, className: 'w-1.5 h-1.5 rounded-full mr-2.5 shrink-0' }),
+    React.createElement(
+      'button',
+      { onClick: onOpen, className: 'flex-1 text-left flex items-center justify-between min-w-0' },
+      React.createElement(
+        'span',
+        { style: { color: C.inkSoft }, className: 'text-xs uppercase tracking-wide w-14 shrink-0' },
+        label
+      ),
+      React.createElement(
+        'span',
+        { style: { color: isFilled ? C.ink : C.inkSoft }, className: 'flex-1 text-sm truncate px-2 ' + (isSkipped ? 'italic' : '') },
+        isFilled ? entry.mealName : isSkipped ? 'Skipped' : 'Tap to add'
+      ),
+      React.createElement(IconChevronRight, { color: C.inkSoft })
+    ),
+    (isFilled || isSkipped) && React.createElement(
+      'button',
+      { onClick: onClear, className: 'ml-1 p-1 shrink-0' },
+      React.createElement(IconTrash, { size: 14, color: C.inkSoft })
+    )
   );
 }
 
-function Sheet({ title, onClose, children }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-end" style={{ background: 'rgba(34,39,31,0.4)' }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ background: C.paper, maxHeight: '85vh' }} className="w-full rounded-t-3xl p-5 overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h3 style={{ color: C.ink, fontFamily: 'Georgia, serif' }} className="text-xl">{title}</h3>
-          <button onClick={onClose} className="p-1"><IconX color={C.inkSoft} /></button>
-        </div>
-        {children}
-      </div>
-    </div>
+function Sheet(_ref6) {
+  var title = _ref6.title;
+  var onClose = _ref6.onClose;
+  var children = _ref6.children;
+
+  return React.createElement(
+    'div',
+    { className: 'fixed inset-0 z-50 flex items-end', style: { background: 'rgba(34,39,31,0.4)' }, onClick: onClose },
+    React.createElement(
+      'div',
+      { onClick: function (e) {
+          return e.stopPropagation();
+        }, style: { background: C.paper, maxHeight: '85vh' }, className: 'w-full rounded-t-3xl p-5 overflow-y-auto' },
+      React.createElement(
+        'div',
+        { className: 'flex items-center justify-between mb-4' },
+        React.createElement(
+          'h3',
+          { style: { color: C.ink, fontFamily: 'Georgia, serif' }, className: 'text-xl' },
+          title
+        ),
+        React.createElement(
+          'button',
+          { onClick: onClose, className: 'p-1' },
+          React.createElement(IconX, { color: C.inkSoft })
+        )
+      ),
+      children
+    )
   );
 }
 
-function SlotSheet({ activeSlot, categories, meals, weekPlan, lastWeekPlan, selectedCategory, setSelectedCategory,
-  showNewCategory, setShowNewCategory, newCategoryText, setNewCategoryText, newMealText, setNewMealText, busy,
-  onClose, onAssign, onSkip, onAddCategory, onAddAndAssignMeal }) {
-  const isDinner = activeSlot.slot === 'Dinner';
+function SlotSheet(_ref7) {
+  var activeSlot = _ref7.activeSlot;
+  var categories = _ref7.categories;
+  var meals = _ref7.meals;
+  var weekPlan = _ref7.weekPlan;
+  var lastWeekPlan = _ref7.lastWeekPlan;
+  var selectedCategory = _ref7.selectedCategory;
+  var setSelectedCategory = _ref7.setSelectedCategory;
+  var showNewCategory = _ref7.showNewCategory;
+  var setShowNewCategory = _ref7.setShowNewCategory;
+  var newCategoryText = _ref7.newCategoryText;
+  var setNewCategoryText = _ref7.setNewCategoryText;
+  var newMealText = _ref7.newMealText;
+  var setNewMealText = _ref7.setNewMealText;
+  var busy = _ref7.busy;
+  var onClose = _ref7.onClose;
+  var onAssign = _ref7.onAssign;
+  var onSkip = _ref7.onSkip;
+  var onAddCategory = _ref7.onAddCategory;
+  var onAddAndAssignMeal = _ref7.onAddAndAssignMeal;
+
+  var isDinner = activeSlot.slot === 'Dinner';
 
   function usedTag(meal) {
-    const usedThisWeekEntry = Object.values(weekPlan).find(r => r.mealId === meal.id && r.status === 'assigned');
-    if (usedThisWeekEntry) return `Used ${usedThisWeekEntry.day}`;
-    const usedLastWeekEntry = Object.values(lastWeekPlan).find(r => r.mealId === meal.id);
+    var usedThisWeekEntry = Object.values(weekPlan).find(function (r) {
+      return r.mealId === meal.id && r.status === 'assigned';
+    });
+    if (usedThisWeekEntry) return 'Used ' + usedThisWeekEntry.day;
+    var usedLastWeekEntry = Object.values(lastWeekPlan).find(function (r) {
+      return r.mealId === meal.id;
+    });
     if (usedLastWeekEntry) return 'Last week';
     return null;
   }
 
-  const lunchMeals = meals.filter(m => m.slot === 'Lunch');
-  const categoryMeals = selectedCategory ? meals.filter(m => m.category === selectedCategory && m.slot === 'Dinner') : [];
+  var lunchMeals = meals.filter(function (m) {
+    return m.slot === 'Lunch';
+  });
+  var categoryMeals = selectedCategory ? meals.filter(function (m) {
+    return m.category === selectedCategory && m.slot === 'Dinner';
+  }) : [];
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end" style={{ background: 'rgba(34,39,31,0.4)' }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{ background: C.paper, maxHeight: '88vh' }} className="w-full rounded-t-3xl p-5 overflow-y-auto">
-        <div className="flex items-center justify-between mb-1">
-          <h3 style={{ color: C.ink, fontFamily: 'Georgia, serif' }} className="text-xl">{activeSlot.day} · {activeSlot.slot}</h3>
-          <button onClick={onClose} className="p-1"><IconX color={C.inkSoft} /></button>
-        </div>
-
-        <button onClick={onSkip} disabled={busy} style={{ borderColor: C.line, color: C.inkSoft }}
-          className="flex items-center gap-1.5 text-sm border rounded-full px-3 py-1.5 mb-4 mt-2">
-          <IconSkip size={14} /> Skip this slot
-        </button>
-
-        {isDinner ? (
-          <>
-            <p style={{ color: C.inkSoft }} className="text-xs uppercase tracking-wide mb-2">Category</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {categories.map(cat => (
-                <button key={cat} onClick={() => setSelectedCategory(cat)}
-                  style={{ background: selectedCategory === cat ? C.sage : C.paperCard, color: selectedCategory === cat ? 'white' : C.ink, borderColor: C.line }}
-                  className="border rounded-full px-3.5 py-1.5 text-sm">{cat}</button>
-              ))}
-              {!showNewCategory && (
-                <button onClick={() => setShowNewCategory(true)} style={{ borderColor: C.line, color: C.sage }}
-                  className="border rounded-full px-3 py-1.5 text-sm flex items-center gap-1"><IconPlus size={14} /> New</button>
-              )}
-            </div>
-
-            {showNewCategory && (
-              <div className="flex gap-2 mb-4">
-                <input autoFocus value={newCategoryText} onChange={e => setNewCategoryText(e.target.value)} placeholder="e.g. Stir-fry"
-                  style={{ borderColor: C.line, color: C.ink }} className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none" />
-                <button onClick={onAddCategory} disabled={busy} style={{ background: C.sage }} className="text-white rounded-lg px-4 text-sm">Add</button>
-              </div>
-            )}
-
-            {selectedCategory && (
-              <div>
-                <p style={{ color: C.inkSoft }} className="text-xs uppercase tracking-wide mb-2">{selectedCategory} meals</p>
-                <div className="space-y-1.5 mb-3">
-                  {categoryMeals.length === 0 && <p style={{ color: C.inkSoft }} className="text-sm italic">No meals in this category yet — add one below.</p>}
-                  {categoryMeals.map(meal => {
-                    const tag = usedTag(meal);
-                    return (
-                      <button key={meal.id} onClick={() => onAssign(meal.id, meal.name)} disabled={busy}
-                        style={{ background: C.paperCard, borderColor: C.line }}
-                        className="w-full flex items-center justify-between border rounded-lg px-3 py-2.5 text-left">
-                        <span style={{ color: C.ink }} className="text-sm">{meal.name}</span>
-                        {tag && <span style={{ background: C.mustardSoft, color: '#8A5D1B' }} className="text-xs rounded-full px-2 py-0.5 shrink-0 ml-2">{tag}</span>}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="flex gap-2">
-                  <input value={newMealText} onChange={e => setNewMealText(e.target.value)} placeholder="Add new meal..."
-                    style={{ borderColor: C.line, color: C.ink }} className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none" />
-                  <button onClick={() => onAddAndAssignMeal(selectedCategory, 'Dinner')} disabled={busy} style={{ background: C.sage }}
-                    className="text-white rounded-lg px-4 text-sm flex items-center gap-1"><IconPlus size={14} /> Add</button>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <p style={{ color: C.inkSoft }} className="text-xs uppercase tracking-wide mb-2">Lunches</p>
-            <div className="space-y-1.5 mb-3">
-              {lunchMeals.length === 0 && <p style={{ color: C.inkSoft }} className="text-sm italic">No lunches saved yet — add one below.</p>}
-              {lunchMeals.map(meal => (
-                <button key={meal.id} onClick={() => onAssign(meal.id, meal.name)} disabled={busy}
-                  style={{ background: C.paperCard, borderColor: C.line }} className="w-full flex items-center justify-between border rounded-lg px-3 py-2.5 text-left">
-                  <span style={{ color: C.ink }} className="text-sm">{meal.name}</span>
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <input value={newMealText} onChange={e => setNewMealText(e.target.value)} placeholder="Add new lunch..."
-                style={{ borderColor: C.line, color: C.ink }} className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none" />
-              <button onClick={() => onAddAndAssignMeal('', 'Lunch')} disabled={busy} style={{ background: C.mustard }}
-                className="text-white rounded-lg px-4 text-sm flex items-center gap-1"><IconPlus size={14} /> Add</button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+  return React.createElement(
+    'div',
+    { className: 'fixed inset-0 z-50 flex items-end', style: { background: 'rgba(34,39,31,0.4)' }, onClick: onClose },
+    React.createElement(
+      'div',
+      { onClick: function (e) {
+          return e.stopPropagation();
+        }, style: { background: C.paper, maxHeight: '88vh' }, className: 'w-full rounded-t-3xl p-5 overflow-y-auto' },
+      React.createElement(
+        'div',
+        { className: 'flex items-center justify-between mb-1' },
+        React.createElement(
+          'h3',
+          { style: { color: C.ink, fontFamily: 'Georgia, serif' }, className: 'text-xl' },
+          activeSlot.day,
+          ' · ',
+          activeSlot.slot
+        ),
+        React.createElement(
+          'button',
+          { onClick: onClose, className: 'p-1' },
+          React.createElement(IconX, { color: C.inkSoft })
+        )
+      ),
+      React.createElement(
+        'button',
+        { onClick: onSkip, disabled: busy, style: { borderColor: C.line, color: C.inkSoft },
+          className: 'flex items-center gap-1.5 text-sm border rounded-full px-3 py-1.5 mb-4 mt-2' },
+        React.createElement(IconSkip, { size: 14 }),
+        ' Skip this slot'
+      ),
+      isDinner ? React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+          'p',
+          { style: { color: C.inkSoft }, className: 'text-xs uppercase tracking-wide mb-2' },
+          'Category'
+        ),
+        React.createElement(
+          'div',
+          { className: 'flex flex-wrap gap-2 mb-4' },
+          categories.map(function (cat) {
+            return React.createElement(
+              'button',
+              { key: cat, onClick: function () {
+                  return setSelectedCategory(cat);
+                },
+                style: { background: selectedCategory === cat ? C.sage : C.paperCard, color: selectedCategory === cat ? 'white' : C.ink, borderColor: C.line },
+                className: 'border rounded-full px-3.5 py-1.5 text-sm' },
+              cat
+            );
+          }),
+          !showNewCategory && React.createElement(
+            'button',
+            { onClick: function () {
+                return setShowNewCategory(true);
+              }, style: { borderColor: C.line, color: C.sage },
+              className: 'border rounded-full px-3 py-1.5 text-sm flex items-center gap-1' },
+            React.createElement(IconPlus, { size: 14 }),
+            ' New'
+          )
+        ),
+        showNewCategory && React.createElement(
+          'div',
+          { className: 'flex gap-2 mb-4' },
+          React.createElement('input', { autoFocus: true, value: newCategoryText, onChange: function (e) {
+              return setNewCategoryText(e.target.value);
+            }, placeholder: 'e.g. Stir-fry',
+            style: { borderColor: C.line, color: C.ink }, className: 'flex-1 rounded-lg border px-3 py-2 text-sm outline-none' }),
+          React.createElement(
+            'button',
+            { onClick: onAddCategory, disabled: busy, style: { background: C.sage }, className: 'text-white rounded-lg px-4 text-sm' },
+            'Add'
+          )
+        ),
+        selectedCategory && React.createElement(
+          'div',
+          null,
+          React.createElement(
+            'p',
+            { style: { color: C.inkSoft }, className: 'text-xs uppercase tracking-wide mb-2' },
+            selectedCategory,
+            ' meals'
+          ),
+          React.createElement(
+            'div',
+            { className: 'space-y-1.5 mb-3' },
+            categoryMeals.length === 0 && React.createElement(
+              'p',
+              { style: { color: C.inkSoft }, className: 'text-sm italic' },
+              'No meals in this category yet — add one below.'
+            ),
+            categoryMeals.map(function (meal) {
+              var tag = usedTag(meal);
+              return React.createElement(
+                'button',
+                { key: meal.id, onClick: function () {
+                    return onAssign(meal.id, meal.name);
+                  }, disabled: busy,
+                  style: { background: C.paperCard, borderColor: C.line },
+                  className: 'w-full flex items-center justify-between border rounded-lg px-3 py-2.5 text-left' },
+                React.createElement(
+                  'span',
+                  { style: { color: C.ink }, className: 'text-sm' },
+                  meal.name
+                ),
+                tag && React.createElement(
+                  'span',
+                  { style: { background: C.mustardSoft, color: '#8A5D1B' }, className: 'text-xs rounded-full px-2 py-0.5 shrink-0 ml-2' },
+                  tag
+                )
+              );
+            })
+          ),
+          React.createElement(
+            'div',
+            { className: 'flex gap-2' },
+            React.createElement('input', { value: newMealText, onChange: function (e) {
+                return setNewMealText(e.target.value);
+              }, placeholder: 'Add new meal...',
+              style: { borderColor: C.line, color: C.ink }, className: 'flex-1 rounded-lg border px-3 py-2 text-sm outline-none' }),
+            React.createElement(
+              'button',
+              { onClick: function () {
+                  return onAddAndAssignMeal(selectedCategory, 'Dinner');
+                }, disabled: busy, style: { background: C.sage },
+                className: 'text-white rounded-lg px-4 text-sm flex items-center gap-1' },
+              React.createElement(IconPlus, { size: 14 }),
+              ' Add'
+            )
+          )
+        )
+      ) : React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(
+          'p',
+          { style: { color: C.inkSoft }, className: 'text-xs uppercase tracking-wide mb-2' },
+          'Lunches'
+        ),
+        React.createElement(
+          'div',
+          { className: 'space-y-1.5 mb-3' },
+          lunchMeals.length === 0 && React.createElement(
+            'p',
+            { style: { color: C.inkSoft }, className: 'text-sm italic' },
+            'No lunches saved yet — add one below.'
+          ),
+          lunchMeals.map(function (meal) {
+            return React.createElement(
+              'button',
+              { key: meal.id, onClick: function () {
+                  return onAssign(meal.id, meal.name);
+                }, disabled: busy,
+                style: { background: C.paperCard, borderColor: C.line }, className: 'w-full flex items-center justify-between border rounded-lg px-3 py-2.5 text-left' },
+              React.createElement(
+                'span',
+                { style: { color: C.ink }, className: 'text-sm' },
+                meal.name
+              )
+            );
+          })
+        ),
+        React.createElement(
+          'div',
+          { className: 'flex gap-2' },
+          React.createElement('input', { value: newMealText, onChange: function (e) {
+              return setNewMealText(e.target.value);
+            }, placeholder: 'Add new lunch...',
+            style: { borderColor: C.line, color: C.ink }, className: 'flex-1 rounded-lg border px-3 py-2 text-sm outline-none' }),
+          React.createElement(
+            'button',
+            { onClick: function () {
+                return onAddAndAssignMeal('', 'Lunch');
+              }, disabled: busy, style: { background: C.mustard },
+              className: 'text-white rounded-lg px-4 text-sm flex items-center gap-1' },
+            React.createElement(IconPlus, { size: 14 }),
+            ' Add'
+          )
+        )
+      )
+    )
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<MealPlanner />);
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(MealPlanner, null));
+
 </script>
 </body>
 </html>
