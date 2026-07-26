@@ -1050,7 +1050,14 @@ function MealPlanner() {
   var busy = _useState212[0];
   var setBusy = _useState212[1];
 
-  var monday = getMonday(new Date());
+  var _useState22 = useState(0);
+
+  var _useState222 = _slicedToArray(_useState22, 2);
+
+  var weekOffset = _useState222[0];
+  var setWeekOffset = _useState222[1];
+
+  var monday = addDays(getMonday(new Date()), weekOffset * 7);
   var weekStart = isoDate(monday);
   var lastMonday = addDays(monday, -7);
   var lastWeekStart = isoDate(lastMonday);
@@ -1574,9 +1581,31 @@ function MealPlanner() {
           'div',
           null,
           React.createElement(
-            'p',
-            { style: { color: C.mustardSoft }, className: 'text-xs uppercase tracking-widest mb-0.5' },
-            'Week of'
+            'div',
+            { className: 'flex items-center gap-1.5 mb-0.5' },
+            React.createElement(
+              'button',
+              { onClick: function () {
+                  return setWeekOffset(function (o) {
+                    return Math.max(0, o - 1);
+                  });
+                }, disabled: weekOffset === 0, className: 'p-0.5 rounded active:bg-white/10 disabled:opacity-30' },
+              React.createElement(IconChevronLeft, { color: 'white', size: 16 })
+            ),
+            React.createElement(
+              'p',
+              { style: { color: C.mustardSoft }, className: 'text-xs uppercase tracking-widest' },
+              weekOffset === 0 ? 'This week' : weekOffset === 1 ? 'Next week' : weekOffset + ' weeks out'
+            ),
+            React.createElement(
+              'button',
+              { onClick: function () {
+                  return setWeekOffset(function (o) {
+                    return o + 1;
+                  });
+                }, className: 'p-0.5 rounded active:bg-white/10' },
+              React.createElement(IconChevronRight, { color: 'white', size: 16 })
+            )
           ),
           React.createElement(
             'h1',
