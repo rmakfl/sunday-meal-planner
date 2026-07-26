@@ -57,6 +57,13 @@ function handleRequest(e) {
   }
 }
 
+function normalizeDateStr(val) {
+  if (Object.prototype.toString.call(val) === '[object Date]') {
+    return Utilities.formatDate(val, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  }
+  return val;
+}
+
 function getSheet(name) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName(name);
@@ -103,8 +110,8 @@ function getWeek(weekStart) {
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
   return data.slice(1)
-    .filter(r => r[0] === weekStart)
-    .map(r => ({ weekStart: r[0], day: r[1], slot: r[2], mealId: r[3], mealName: r[4], status: r[5] }));
+    .filter(r => normalizeDateStr(r[0]) === weekStart)
+    .map(r => ({ weekStart: normalizeDateStr(r[0]), day: r[1], slot: r[2], mealId: r[3], mealName: r[4], status: r[5] }));
 }
 
 function setSlot(weekStart, day, slot, mealId, mealName, status) {
@@ -112,7 +119,7 @@ function setSlot(weekStart, day, slot, mealId, mealName, status) {
   const data = sheet.getDataRange().getValues();
   let rowIndex = -1;
   for (let i = 1; i < data.length; i++) {
-    if (data[i][0] === weekStart && data[i][1] === day && data[i][2] === slot) {
+    if (normalizeDateStr(data[i][0]) === weekStart && data[i][1] === day && data[i][2] === slot) {
       rowIndex = i + 1;
       break;
     }
@@ -131,6 +138,6 @@ function getWeeksList() {
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
   const weeks = {};
-  data.slice(1).forEach(r => { if (r[0]) weeks[r[0]] = true; });
+  data.slice(1).forEach(r => { if (r[0]) weeks[normalizeDateStr(r[0])] = true; });
   return Object.keys(weeks).sort().reverse();
 }
